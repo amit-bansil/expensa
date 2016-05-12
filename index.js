@@ -16,6 +16,7 @@ app.set('port', port);
 app.post(inboundMessageEndpoint, function(request, response) {
   console.log(request.body);
   console.log(request.query);
+  response.send('got it.');
 });
 
 app.listen(app.get('port'), function() {
