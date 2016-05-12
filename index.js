@@ -10,28 +10,63 @@ var mailgun = require('mailgun-js')({
 });
 var inboundMessageEndpoint = env.ENDPOINT_SECRET;
 
-//messagePosted
+//main flow
 function messagePosted(message){
-  console.log(message);
+  var parsedMessage = parseMessage(message);
+  var parsedMessageWithLinks = uploadAttachments(parsedMessage);
+  appendToGoogleSpreadsheet(parsedMessageWithLinks);
+  confirmReceipt(parsedMessageWithLinks);
 }
 
-//setup an http server to parse & forward posts to inboundMessageEndpoint to messagePosted
+//setup an http server to parse posts to inboundMessageEndpoint
+//and foroward them to messagePosted function above
 var server = http.createServer(function(req, res) {
+  message = {};
   if (req.method === 'POST' && req.url === '/' + inboundMessageEndpoint) {
     var busboy = new Busboy({headers: req.headers});
-    busboy.on('field', function(fieldname, val) {
-      console.log(fieldname, '=', val);
+    busboy.on('field', function(fieldName, val) {
+      message[fieldName] = val;
     });
     busboy.on('finish', function() {
-      res.writeHead(200, { Connection: 'close' });
+      res.writeHead(200, {Connection: 'close'});
       res.end('got it.');
+      messagePosted(message);
     });
     req.pipe(busboy);
   }
-})
+});
 
 server.listen(port, function() {
   console.log('listening. port = ' + port);
 });
 
+//parse the posted message into the fields the rest of the app works with
+function messagePosted(message){
+  var sender = message.sender;
+  var recipient = message.recipient.replace('@' + env.MAILGUN_DOMAIN, '');
+
+  var subject = message.subject;
+  //split subject into (<amount>:) <description>
+  var subjectSplit = message.indexOf(':');
+  var description = subject;
+  var amount = null;
+  if(subjectSplit !== -1){
+    amount = subject.slice(0, subjectSplit);
+    description = subject.slice(subjectSplit);
+  }
+
+  return {
+    sender:      sender,
+    recipient:   recipient,
+    description: description,
+    amount:      amount,
+  }
+}
+
+mailgun.messages().send(message, function(error, data){
+  if(error){
+    console.log(error);
+  }
+
+});
 //UTILITIES---------------------------------------------------------------------
