@@ -1,6 +1,5 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var app = express();
+var http = require('http');
+var Busboy = require('busboy');
 
 //environment variables
 var env = process.env;
@@ -16,18 +15,23 @@ function messagePosted(message){
   console.log(message);
 }
 
-//setup express to forward posts to inboundMessageEndpoint to messagePosted
-app.set('port', port);
-app.use(bodyParser.text());
+//setup an http server to parse & forward posts to inboundMessageEndpoint to messagePosted
+var server = http.createServer(function(req, res) {
+  if (req.method === 'POST' && req.url === '/' + inboundMessageEndpoint) {
+    var busboy = new Busboy({headers: req.headers});
+    busboy.on('field', function(fieldname, val) {
+      console.log(fieldname, '=', val);
+    });
+    busboy.on('finish', function() {
+      res.writeHead(200, { Connection: 'close' });
+      res.end('got it.');
+    });
+    req.pipe(busboy);
+  }
+})
 
-app.post('/' + inboundMessageEndpoint, function(request, response) {
-  console.log('content-type', request.get('content-type'));
-  messagePosted(request.body);
-  response.send('got it.');
-});
-
-app.listen(app.get('port'), function() {
-  console.log('Running; port = ', app.get('port'));
+server.listen(port, function() {
+  console.log('listening. port = ' + port);
 });
 
 //UTILITIES---------------------------------------------------------------------
