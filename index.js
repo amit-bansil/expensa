@@ -1,4 +1,5 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 var app = express();
 
 //environment variables
@@ -17,7 +18,7 @@ function messagePosted(message){
 
 //setup express to forward posts to inboundMessageEndpoint to messagePosted
 app.set('port', port);
-app.use(express.bodyParser());
+app.use(bodyParser.json());
 
 app.post('/' + inboundMessageEndpoint, function(request, response) {
   messagePosted(request.body);
