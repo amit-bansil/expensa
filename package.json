@@ -1,7 +1,7 @@
 {
-  "name": "node-js-getting-started",
+  "name": "Expensa",
   "version": "0.2.5",
-  "description": "A sample Node.js app using Express 4",
+  "description": "An email robot for tracking receipts and tax documents.",
   "engines": {
     "node": "5.9.1"
   },
@@ -10,17 +10,11 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "ejs": "2.4.1",
     "express": "4.13.3"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
+    "url": "https://github.com/amit-bansil/expensa"
   },
-  "keywords": [
-    "node",
-    "heroku",
-    "express"
-  ],
   "license": "MIT"
 }

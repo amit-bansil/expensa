@@ -1,2 +1,3 @@
-# expensa
-an email robot for tracking receipts and tax documents
+# Expensa
+
+An email robot for tracking receipts and tax documents.
