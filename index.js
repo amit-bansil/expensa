@@ -13,7 +13,7 @@ var inboundMessageEndpoint = env.ENDPOINT_SECRET;
 //setup express
 app.set('port', port);
 
-app.post(inboundMessageEndpoint, function(request, response) {
+app.post('/' + inboundMessageEndpoint, function(request, response) {
   console.log(request.body);
   console.log(request.query);
   response.send('got it.');

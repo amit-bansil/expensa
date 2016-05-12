@@ -9,8 +9,11 @@ Once you set this up you'll have a collection of email addresses of the form
 to. The subject line of your emails should be of the form `<amount>: <description>`
 for receipts and just `<description>` for tax documents that don't have an amount.
 
-The bot will append rows of the form <date>, <category>, (<amount>), <description> to a google
-spreadsheet.
+The bot will append rows of the form:
+
+<date>, <sender email>, <category>, (<amount>), <description>
+
+to a google spreadsheet.
 
 # Setup
 
