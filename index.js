@@ -14,7 +14,8 @@ var inboundMessageEndpoint = env.ENDPOINT_SECRET;
 app.set('port', port);
 
 app.post(inboundMessageEndpoint, function(request, response) {
-
+  console.log(request.body);
+  console.log(request.query);
 });
 
 app.listen(app.get('port'), function() {
