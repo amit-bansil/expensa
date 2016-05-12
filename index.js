@@ -21,6 +21,7 @@ app.set('port', port);
 app.use(bodyParser.text());
 
 app.post('/' + inboundMessageEndpoint, function(request, response) {
+  console.log('content-type', request.get('content-type'));
   messagePosted(request.body);
   response.send('got it.');
 });
