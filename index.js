@@ -18,7 +18,7 @@ function messagePosted(message){
 
 //setup express to forward posts to inboundMessageEndpoint to messagePosted
 app.set('port', port);
-app.use(bodyParser.json());
+app.use(bodyParser.text());
 
 app.post('/' + inboundMessageEndpoint, function(request, response) {
   messagePosted(request.body);
