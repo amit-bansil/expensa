@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 
 //environment variables
-var env = proccess.env;
+var env = process.env;
 var port = env.PORT || 5000;
 var mailgun = require('mailgun-js')({
   apiKey: env.MAILGUN_API_KEY,
