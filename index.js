@@ -10,12 +10,17 @@ var mailgun = require('mailgun-js')({
 });
 var inboundMessageEndpoint = env.ENDPOINT_SECRET;
 
-//setup express
+//messagePosted
+function messagePosted(message){
+  console.log(message);
+}
+
+//setup express to forward posts to inboundMessageEndpoint to messagePosted
 app.set('port', port);
+app.use(express.bodyParser());
 
 app.post('/' + inboundMessageEndpoint, function(request, response) {
-  console.log(request.body);
-  console.log(request.query);
+  messagePosted(request.body);
   response.send('got it.');
 });
 
