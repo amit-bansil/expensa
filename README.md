@@ -5,13 +5,13 @@ An email robot for tracking receipts and tax documents.
 # How it works
 
 Once you set this up you'll have a collection of email addresses of the form
-`<category>@<money.your.domain>` that you can send receipts and tax documents
+`<category>@<your.domain>` that you can send receipts and tax documents
 to. The subject line of your emails should be of the form `<amount>: <description>`
 for receipts and just `<description>` for tax documents that don't have an amount.
 
 The bot will append rows of the form:
 
-<date>, <sender email>, <category>, (<amount>), <description>
+<date>, <sender email>, <category>, (<amount>), <description>, (<link to body>), (link to first attachement...)
 
 to a google spreadsheet.
 
@@ -26,7 +26,7 @@ a bit involved. Here's what you need to do.
 
 https://devcenter.heroku.com/articles/getting-started-with-nodejs#introduction
 
-1. Create a Heroku app:
+1. Create a Heroku app by running the following command in the project dir:
 
 ```
 > heroku apps:create <your.app.name>
@@ -41,8 +41,7 @@ https://devcenter.heroku.com/articles/getting-started-with-nodejs#introduction
 1. Open a Mailgun account and configure a domain. Don't forget to add DNS records
 for receiving mail.
 
-1. Create a `catch_all()` route that forwards messages to wherever your want
-the full messages archived as well as your app:
+1. Create a `catch_all()` route that forwards messages to your app:
 `http://<your.app.name>.heroku.com/<ENDPOINT_SECRET>`
 
 1. Give Heroku access to Mailgun by setting the following keys:
