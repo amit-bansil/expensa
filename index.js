@@ -65,6 +65,7 @@ function messagePosted(message){
   }
 
   return {
+    timestamp:   moment().format('DD/MM/YY hh:mm a')
     sender:      sender,
     category:    category,
     description: description,
@@ -94,7 +95,7 @@ function appendToGoogleSpreadsheet(message){
   function appendRowToSpreadsheet(spreadsheet, rowNum){
     var row = {};
     row[rowNum] = {
-      1:moment().format('DD/MM/YY hh:mm a'),
+      1:message.timestamp,
       2:message.sender,
       3:message.category,
       4:message.amount,
@@ -132,30 +133,31 @@ function appendToGoogleSpreadsheet(message){
 
 //email sender a confirmation of what was done
 function confirmReceipt(message){
-
+  var fields = JSON.stringify(message, null, '    ');
+  var receipt = 'The following message has been processed:\n' + fields + '\n';
+  reciept    += '--Expensa Bot';
+  sendmail({
+    to: message.sender,
+    subject: 'Message Processed on ' + fields.timestamp,
+    text: receipt,
+  });
 }
 
 //notify user with email 'to' of error described by message
 function logError(to, message){
   console.log('Error:', to, message);
-  var data = {
-    from: 'Expensa Bot <expensa-bot@' + mailgunDomain + '>',
+  sendMail({
     to: to,
-    subject: 'expenas encountered an unexpected error, try your request again.',
+    subject: 'expensa encountered an unexpected error, try your request again.',
     text: message,
-  };
-
-  mailgun.messages().send(data, function (error, body) {
+  });
+}
+//UTILITIES---------------------------------------------------------------------
+function sendMail(email){
+  email.from = 'Expensa Bot <expensa-bot@' + mailgunDomain + '>';
+  mailgun.messages().send(email, function (error, body) {
     if(error){
-      console.log('error sending error to',to, error);
+      console.log('error sending mail:',email.to, error);
     }
   });
 }
-
-mailgun.messages().send(message, function(error, data){
-  if(error){
-    console.log(error);
-  }
-
-});
-//UTILITIES---------------------------------------------------------------------
