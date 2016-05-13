@@ -50,3 +50,18 @@ for receiving mail.
 heroku config:set MAILGUN_DOMAIN=<money.your.domain>
 heroku config:set MAILGUN_API_LEY=<YourMailgunAPIKey>
 ```
+
+1. Setup google drive api acccess as per the link below:
+
+https://www.npmjs.com/package/google-spreadsheet-append
+
+When you get to the part where you save the .pem file stick it in the root of the
+project with the name `gdrive.pem`.
+
+Store the following keys that you got while setting up api access in Heroku's
+environment as follows:
+```
+heroku config:set GDRIVE_EMAIL=<service account email>
+heroku config:set GRDIVE_KEYFILE=gdrive.pem
+heroku config:set GDRIVE_FILEID=<spreadsheet file id>
+```
