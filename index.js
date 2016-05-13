@@ -85,7 +85,19 @@ function confirmReceipt(message){
 
 //notify user with email 'recipient' of error described by message
 function error(recipient, message){
+  console.log('Error:', recipient, message);
+  var data = {
+    from: 'Expensa Bot <expensa-bot@' + mailgunDomain + '>',
+    to: recipient,
+    subject: 'expenas encountered an unexpected error, try your request again.',
+    text: message,
+  };
 
+  mailgun.messages().send(data, function (error, body) {
+    if(error){
+      console.log('error sending error to recipient', recipient, error);
+    }
+  });
 }
 
 mailgun.messages().send(message, function(error, data){
