@@ -64,6 +64,29 @@ function messagePosted(message){
   }
 }
 
+//Upload attachments to s3 and replace them with a link to the file
+//note that this approach requires the entire attachment to be in RAM
+//that should be fine since emails max out at 25mb and we have 512mb on the
+//heroku server
+//note that this message edits and returns the input parameter
+function uploadAttachments(parsedMessage){
+  var parsedMessageWithLinks = parsedMessage;
+}
+
+//append fields from message to google spreadsheet
+function appendToGoogleSpreadsheet(message){
+}
+
+//email sender a confirmation of what was done
+function confirmReceipt(message){
+
+}
+
+//notify user with email 'recipient' of error described by message
+function error(recipient, message){
+
+}
+
 mailgun.messages().send(message, function(error, data){
   if(error){
     console.log(error);
