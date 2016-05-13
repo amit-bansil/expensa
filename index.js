@@ -5,9 +5,10 @@ var _ = require('lodash');
 //environment variables
 var env = process.env;
 var port = env.PORT || 5000;
+var mailgunDomain = env.MAILGUN_DOMAIN;
 var mailgun = require('mailgun-js')({
   apiKey: env.MAILGUN_API_KEY,
-  domain: env.MAILGUN_DOMAIN,
+  domain: mailgunDomain,
 });
 var inboundMessageEndpoint = env.ENDPOINT_SECRET;
 
@@ -44,7 +45,7 @@ server.listen(port, function() {
 //parse the posted message into the fields the rest of the app works with
 function messagePosted(message){
   var sender = message.sender;
-  var recipient = message.recipient.replace('@' + env.MAILGUN_DOMAIN, '');
+  var recipient = message.recipient.replace('@' + mailgunDomain, '');
 
   var subject = message.subject;
   //split subject into (<amount>:) <description>
