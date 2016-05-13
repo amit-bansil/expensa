@@ -1,16 +1,23 @@
 var http = require('http');
 var Busboy = require('busboy');
 var _ = require('lodash');
+var Spreadsheet = require('edit-google-spreadsheet');
 
 //environment variables
 var env = process.env;
 var port = env.PORT || 5000;
+
 var mailgunDomain = env.MAILGUN_DOMAIN;
 var mailgun = require('mailgun-js')({
   apiKey: env.MAILGUN_API_KEY,
   domain: mailgunDomain,
 });
+
 var inboundMessageEndpoint = env.ENDPOINT_SECRET;
+
+var gDriveEmail = env.GDRIVE_EMAIL;
+var gDriveFileId = env.GDRIVE_FILEID;
+var gDriveKey = env.GDRIVE_KEY;
 
 //main flow
 function messagePosted(message){
@@ -45,7 +52,7 @@ server.listen(port, function() {
 //parse the posted message into the fields the rest of the app works with
 function messagePosted(message){
   var sender = message.sender;
-  var recipient = message.recipient.replace('@' + mailgunDomain, '');
+  var category = message.recipient.replace('@' + mailgunDomain, '');
 
   var subject = message.subject;
   //split subject into (<amount>:) <description>
@@ -59,7 +66,7 @@ function messagePosted(message){
 
   return {
     sender:      sender,
-    recipient:   recipient,
+    category:    category,
     description: description,
     amount:      amount,
   }
@@ -76,6 +83,51 @@ function uploadAttachments(parsedMessage){
 
 //append fields from message to google spreadsheet
 function appendToGoogleSpreadsheet(message){
+  function onSpreadsheetLogin(spreadsheet){
+    spreadsheet.receive(withErr('receive',
+      _.curry(onSpreadsheetReceive)(_, spreadsheet))
+    );
+  }
+  function onSpreadsheetReceive(spreadsheet, rows, info){
+    appendRowToSpreadsheet(spreadsheet, info.nextRow);
+  }
+  function appendRowToSpreadsheet(spreadsheet, rowNum){
+    var row = {};
+    row[rowNum] = {
+      1:moment().format('DD/MM/YY hh:mm a'),
+      2:message.sender,
+      3:message.category,
+      4:message.amount,
+      5:message.description,
+    };
+    spreadsheet.add(row);
+    spreadsheet.send(withErr('send', _.noop));
+  }
+  Spreadsheet.load({
+    debug:true,
+    spreadsheetId: gDriveFileId,
+    worksheetName: 'Sheet1',
+    oauth:{
+      email: gDriveEmail,
+      key: gDriveKey,
+    },
+  }, withErr('login', onSpreadsheetLogin));
+
+  //wrap a function in another function that logs errors passed in the first
+  //argument
+  function withErr(opname, fn){
+    return function(){
+      args = _.toArray(arguments);
+
+      var error = args.pop();
+      if(error){
+        logError(message.sender, opname + ' failed: ' + error);
+        throw error;
+      }
+
+      fn.apply(null, args);
+    }
+  }
 }
 
 //email sender a confirmation of what was done
@@ -83,19 +135,19 @@ function confirmReceipt(message){
 
 }
 
-//notify user with email 'recipient' of error described by message
-function error(recipient, message){
-  console.log('Error:', recipient, message);
+//notify user with email 'to' of error described by message
+function logError(to, message){
+  console.log('Error:', to, message);
   var data = {
     from: 'Expensa Bot <expensa-bot@' + mailgunDomain + '>',
-    to: recipient,
+    to: to,
     subject: 'expenas encountered an unexpected error, try your request again.',
     text: message,
   };
 
   mailgun.messages().send(data, function (error, body) {
     if(error){
-      console.log('error sending error to recipient', recipient, error);
+      console.log('error sending error to',to, error);
     }
   });
 }
