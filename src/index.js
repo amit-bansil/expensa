@@ -110,7 +110,7 @@ function confirmReceipt(message){
   receipt    += '--Expensa Bot';
   mailer.send({
     to: message.sender,
-    subject: 'Message Processed on ' + fields.timestamp,
+    subject: 'Message Processed on ' + message.timestamp,
     text: receipt,
   });
 }
