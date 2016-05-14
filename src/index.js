@@ -31,7 +31,7 @@ var spreadsheet = new SpreadsheetClass({
 
 //------------------------------------------------------------------------------
 //main flow
-function messagePosted(url, message){
+function _messagePosted(url, message){
   //for security only accept posts to the secret endpoint
   if(url !== '/' + inboundMessageEndpoint){
     return;
@@ -45,6 +45,16 @@ function messagePosted(url, message){
 
   confirmReceipt(parsedMessageWithLinks);
 }
+function messagePosted(url, message){
+  try{
+    _messagePosted.apply(null, arguments);
+  }catch(error){
+    logError(message.sender, message);
+    throw error;
+  }
+}
+
+postServer.listen(messagePosted);
 
 //------------------------------------------------------------------------------
 function parseMessage(message){
