@@ -28,12 +28,14 @@ SpreadsheetClass.prototype.append = function(row, callback){
     appendRowToSpreadsheet(spreadsheet, info.nextRow);
   }
   function appendRowToSpreadsheet(spreadsheet, rowNum){
-    var row = {};
-    row[rowNum] = {};
+    //build cells we are going to insert by creating a 1 indexed sparse map
+    var cells = {};
+    cells[rowNum] = {};
     _.each(row, function(value, index){
-      row[rowNum][index + 1] = value;
+      cells[rowNum][index + 1] = value;
     });
-    spreadsheet.add(row);
+
+    spreadsheet.add(cells);
     spreadsheet.send(withErr('send', _.noop));
   }
   editSpreadsheet.load({
