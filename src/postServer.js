@@ -19,6 +19,7 @@ function PostServer(port){
 }
 
 PostServer.prototype.listen = function(handler){
+  var port = this.port;
   var server = http.createServer(function(req, res) {
     post = {};
     if (req.method === 'POST') {
@@ -45,7 +46,7 @@ PostServer.prototype.listen = function(handler){
     }
   });
 
-  server.listen(this.port, function() {
+  server.listen(port, function() {
     console.log('listening. port = ' + port);
   });
 }
