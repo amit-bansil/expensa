@@ -97,7 +97,7 @@ function appendMessageToSpreadsheet(message){
 //note that this approach requires the entire attachment to be in RAM
 //that should be fine since emails max out at 25mb and we have 512mb on the
 //heroku server
-//note that this message edits and returns the input parameter
+//note that this method edits and returns the input parameter
 function uploadAttachments(parsedMessage){
   return parsedMessage;
 }
