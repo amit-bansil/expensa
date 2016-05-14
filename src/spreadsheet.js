@@ -53,8 +53,8 @@ SpreadsheetClass.prototype.append = function(row, callback){
 
       var error = args.pop();
       if(error){
-        callback(opname + ' failed: ' + error);
-        throw error;
+        callback(opname + ' failed: ' + JSON.stringify(error));
+        console.log(error, error.stack);
       }
 
       fn.apply(null, args);

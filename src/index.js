@@ -50,7 +50,7 @@ function messagePosted(url, message){
     _messagePosted.apply(null, arguments);
   }catch(error){
     logError(message.sender, message);
-    throw error;
+    console.log(error.stack);
   }
 }
 
