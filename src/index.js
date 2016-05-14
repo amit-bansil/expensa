@@ -72,7 +72,7 @@ function parseMessage(message){
   }
 
   return {
-    timestamp:   moment().format('DD/MM/YY hh:mm a'),
+    timestamp:   moment().format('D/M/YY h:mma'),
     sender:      sender,
     category:    category,
     description: description,
