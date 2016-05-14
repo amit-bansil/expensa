@@ -108,7 +108,7 @@ function confirmReceipt(message){
   var fields  = JSON.stringify(message, null, '    ');
   var receipt = 'The following message has been processed:\n' + fields + '\n';
   reciept    += '--Expensa Bot';
-  mailer({
+  mailer.send({
     to: message.sender,
     subject: 'Message Processed on ' + fields.timestamp,
     text: receipt,
@@ -120,7 +120,7 @@ function confirmReceipt(message){
 function logError(to, message){
   message = message + '';
   console.log('Error:', to, message);
-  mailer({
+  mailer.send({
     to: to,
     subject: 'Expensa encountered an unexpected error, try your request again.',
     text: message,

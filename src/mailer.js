@@ -14,11 +14,11 @@
  */
 var Mailgun = require('mailgun-js');
 
-function Mail(options){
+function Mailer(options){
   this.options = options;
 }
 
-Mail.prototype.send = function(email){
+Mailer.prototype.send = function(email){
   email.from = this.options.from;
   Mailgun(options).messages().send(email, function (error, body) {
     if(error){
@@ -27,4 +27,4 @@ Mail.prototype.send = function(email){
   });
 }
 
-module.exports = Mail;
+module.exports = Mailer;
