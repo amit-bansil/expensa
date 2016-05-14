@@ -43,7 +43,7 @@ function _messagePosted(url, message){
 
   appendMessageToSpreadsheet(parsedMessage);
 
-  confirmReceipt(parsedMessageWithLinks);
+  confirmReceipt(parsedMessage);
 }
 function messagePosted(url, message){
   try{
