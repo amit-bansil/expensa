@@ -21,8 +21,8 @@ function SpreadsheetClass(options){
 SpreadsheetClass.prototype.append = function(row, callback){
   function onSpreadsheetLogin(spreadsheet){
     spreadsheet.receive(withErr('receive',
-      _.curry(onSpreadsheetReceive)(_, spreadsheet))
-    );
+      _.curry(onSpreadsheetReceive)(spreadsheet)
+    ));
   }
   function onSpreadsheetReceive(spreadsheet, rows, info){
     appendRowToSpreadsheet(spreadsheet, info.nextRow);
