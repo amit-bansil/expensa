@@ -18,6 +18,7 @@ function PostServer(port){
   this.port = port;
 }
 
+//TODO fix pyramid of doom
 PostServer.prototype.listen = function(handler){
   var port = this.port;
   var server = http.createServer(function(req, res) {
