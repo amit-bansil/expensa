@@ -34,7 +34,7 @@ var spreadsheet = new SpreadsheetClass({
 function _messagePosted(url, message){
   //for security only accept posts to the secret endpoint
   if(url !== '/' + inboundMessageEndpoint){
-    return;
+    throw new Error('unexpected url:' + url);
   }
 
   var parsedMessage = parseMessage(message);
