@@ -68,7 +68,7 @@ function parseMessage(message){
   var amount = null;
   if(subjectSplit !== -1){
     amount = subject.slice(0, subjectSplit);
-    description = subject.slice(subjectSplit);
+    description = subject.slice(subjectSplit + 1);
   }
 
   return {
