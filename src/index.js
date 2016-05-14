@@ -118,6 +118,7 @@ function confirmReceipt(message){
 //------------------------------------------------------------------------------
 //notify user with email 'to' of error described by message
 function logError(to, message){
+  message = message + '';
   console.log('Error:', to, message);
   mailer({
     to: to,
