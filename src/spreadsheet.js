@@ -38,11 +38,11 @@ SpreadsheetClass.prototype.append = function(row, callback){
   }
   editSpreadsheet.load({
     debug:true,
-    spreadsheetId: gDriveFileId,
+    spreadsheetId: this.options.fileId,
     worksheetName: 'Sheet1',
     oauth:{
-      email: gDriveEmail,
-      key: gDriveKey,
+      email: this.options.email,
+      key: this.options.key,
     },
   }, withErr('login', onSpreadsheetLogin));
   //wrap a function in another function that logs errors passed in the first
