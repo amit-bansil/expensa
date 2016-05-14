@@ -6,6 +6,7 @@ var MailerClass      = require('./mailer');
 var PostServerClass  = require('./postServer');
 var SpreadsheetClass = require('./spreadsheet');
 
+//------------------------------------------------------------------------------
 //environment variables
 var env = process.env;
 
@@ -28,6 +29,7 @@ var spreadsheet = new SpreadsheetClass({
   key:    env.GDRIVE_KEY || fs.readFileSync(env.GDRIVE_KEYFILE),
 });
 
+//------------------------------------------------------------------------------
 //main flow
 function messagePosted(url, message){
   //for security only accept posts to the secret endpoint
@@ -44,6 +46,7 @@ function messagePosted(url, message){
   confirmReceipt(parsedMessageWithLinks);
 }
 
+//------------------------------------------------------------------------------
 function parseMessage(message){
   var sender = message.sender;
   var category = message.recipient.replace('@' + mailgunDomain, '');
@@ -67,6 +70,7 @@ function parseMessage(message){
   }
 }
 
+//------------------------------------------------------------------------------
 function appendMessageToSpreadsheet(message){
   var errorHook = _.curry(logError)(message.sender);
   spreadsheet.append([
@@ -78,6 +82,7 @@ function appendMessageToSpreadsheet(message){
   ], errorHook);
 }
 
+//------------------------------------------------------------------------------
 //Upload attachments to s3 and replace them with a link to the file
 //note that this approach requires the entire attachment to be in RAM
 //that should be fine since emails max out at 25mb and we have 512mb on the
@@ -87,6 +92,7 @@ function uploadAttachments(parsedMessage){
   return parsedMessage;
 }
 
+//------------------------------------------------------------------------------
 //email sender a confirmation of what was done
 function confirmReceipt(message){
   var fields  = JSON.stringify(message, null, '    ');
@@ -99,6 +105,7 @@ function confirmReceipt(message){
   });
 }
 
+//------------------------------------------------------------------------------
 //notify user with email 'to' of error described by message
 function logError(to, message){
   console.log('Error:', to, message);
