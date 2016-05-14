@@ -20,7 +20,7 @@ function Mailer(options){
 
 Mailer.prototype.send = function(email){
   email.from = this.options.from;
-  Mailgun(options).messages().send(email, function (error, body) {
+  Mailgun(this.options).messages().send(email, function (error, body) {
     if(error){
       console.log('error sending mail:',email, error);
     }
