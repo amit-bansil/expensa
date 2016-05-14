@@ -50,8 +50,7 @@ SpreadsheetClass.prototype.append = function(row, callback){
   function withErr(opname, fn){
     return function(){
       args = _.toArray(arguments);
-
-      var error = args.pop();
+      var error = args.shift();
       if(error){
         callback(opname + ' failed: ' + JSON.stringify(error));
         console.log(error, error.stack);
