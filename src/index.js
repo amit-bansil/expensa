@@ -63,7 +63,7 @@ function parseMessage(message){
 
   var subject = message.subject;
   //split subject into (<amount>:) <description>
-  var subjectSplit = message.indexOf(':');
+  var subjectSplit = subject.indexOf(':');
   var description = subject;
   var amount = null;
   if(subjectSplit !== -1){
