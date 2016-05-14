@@ -50,8 +50,7 @@ function messagePosted(url, message){
   try{
     _messagePosted.apply(null, arguments);
   }catch(error){
-    logError(message.sender, message);
-    console.log(error.stack);
+    logError(message.sender, error);
   }
 }
 
@@ -117,12 +116,16 @@ function confirmReceipt(message){
 }
 
 //------------------------------------------------------------------------------
-//notify user with email 'to' of error described by message
-function logError(to, message){
-  console.log('Error:', to, message);
+//notify user with email 'to' of exception/text 'error'
+function logError(to, error){
+  if(error.stack){
+    error = error.stack;
+  }
+  console.log('Error:', to, error);
   mailer.send({
-    to: to,
-    subject: 'Expensa encountered an unexpected error, try your request again.',
-    text: JSON.stringify(message),
+    to:      to,
+    subject: 'Expensa encountered an unexpected error, try your request again.'
+      + '(' + moment().format() + ')',
+    text:    error + '',
   });
 }
