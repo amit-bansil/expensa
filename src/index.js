@@ -1,6 +1,7 @@
 
 var _                = require('lodash');
 var fs               = require('fs');
+var moment           = require('moment');
 
 var MailerClass      = require('./mailer');
 var PostServerClass  = require('./postServer');
