@@ -107,7 +107,7 @@ function uploadAttachments(parsedMessage){
 function confirmReceipt(message){
   var fields  = JSON.stringify(message, null, '    ');
   var receipt = 'The following message has been processed:\n' + fields + '\n';
-  reciept    += '--Expensa Bot';
+  receipt    += '--Expensa Bot';
   mailer.send({
     to: message.sender,
     subject: 'Message Processed on ' + fields.timestamp,
