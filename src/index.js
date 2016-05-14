@@ -118,11 +118,10 @@ function confirmReceipt(message){
 //------------------------------------------------------------------------------
 //notify user with email 'to' of error described by message
 function logError(to, message){
-  message = message + '';
   console.log('Error:', to, message);
   mailer.send({
     to: to,
     subject: 'Expensa encountered an unexpected error, try your request again.',
-    text: message,
+    text: JSON.stringify(message),
   });
 }
