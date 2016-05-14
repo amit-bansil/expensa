@@ -11,14 +11,14 @@
  * spreadsheet.append([1,2,3], function(error){});
  */
 
-var Spreadsheet = require('edit-google-spreadsheet');
+var editSpreadsheet = require('edit-google-spreadsheet');
 var _ = require('lodash');
 
-function Spreadsheet(options){
+function SpreadsheetClass(options){
   this.options = options;
 }
 
-Spreadsheet.prototype.append = function(row, callback){
+SpreadsheetClass.prototype.append = function(row, callback){
   function onSpreadsheetLogin(spreadsheet){
     spreadsheet.receive(withErr('receive',
       _.curry(onSpreadsheetReceive)(_, spreadsheet))
@@ -36,7 +36,7 @@ Spreadsheet.prototype.append = function(row, callback){
     spreadsheet.add(row);
     spreadsheet.send(withErr('send', _.noop));
   }
-  Spreadsheet.load({
+  editSpreadsheet.load({
     debug:true,
     spreadsheetId: gDriveFileId,
     worksheetName: 'Sheet1',
@@ -62,4 +62,4 @@ Spreadsheet.prototype.append = function(row, callback){
   }
 }
 
-module.exports = Spreadsheet;
+module.exports = SpreadsheetClass;

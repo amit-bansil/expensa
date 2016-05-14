@@ -1,7 +1,9 @@
 
-var _ = require('lodash');
-var MailerClass = require('./mailer');
-var PostServerClass = require('./postServer');
+var _                = require('lodash');
+var fs               = require('fs');
+
+var MailerClass      = require('./mailer');
+var PostServerClass  = require('./postServer');
 var SpreadsheetClass = require('./spreadsheet');
 
 //environment variables
@@ -20,9 +22,10 @@ var mailer = new MailerClass({
 });
 
 var spreadsheet = new SpreadsheetClass({
-  email:  env.GDRIVE_EMAIL;
-  fileId: env.GDRIVE_FILEID;
-  key:    env.GDRIVE_KEY;
+  email:  env.GDRIVE_EMAIL,
+  fileId: env.GDRIVE_FILEID,
+  //fallback to a local file when we are running locally
+  key:    env.GDRIVE_KEY || fs.readFileSync(env.GDRIVE_KEYFILE),
 });
 
 //main flow
@@ -56,7 +59,7 @@ function parseMessage(message){
   }
 
   return {
-    timestamp:   moment().format('DD/MM/YY hh:mm a')
+    timestamp:   moment().format('DD/MM/YY hh:mm a'),
     sender:      sender,
     category:    category,
     description: description,

@@ -27,4 +27,4 @@ Mail.prototype.send = function(email){
   });
 }
 
-module.export = mail;
+module.exports = Mail;
