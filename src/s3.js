@@ -21,7 +21,13 @@ S3Class.prototype.upload = function(filename, contentType, buffer, callback){
   fs.writeFileSync(tempFile, buffer);
 
   function done(error){
-    fs.unlinkSync(tempFile);
+    //for unknown reasons sometimes we get an error where fs.unlinkSync fails
+    //this gaurd seems to prevent it.
+    //Although this will eventually fill the disk, heroku's daily restarts
+    //will take care of that.
+    if(!error){
+      fs.unlinkSync(tempFile);
+    }
     var uploadUrl = 'http://' + bucket + '.s3.amazonaws.com/' + filename;
     callback(error, uploadUrl);
   }
