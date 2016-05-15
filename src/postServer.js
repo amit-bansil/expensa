@@ -20,7 +20,9 @@ function PostServer(port){
 }
 
 function handlePost(req, res, handler){
-  var post = {};
+  var post = {
+    attachments: [],
+  };
   var busboy = new Busboy({headers: req.headers});
 
   busboy.on('field', function(fieldName, val) {
@@ -29,14 +31,20 @@ function handlePost(req, res, handler){
 
   busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
     var attachment = {
-      
+      fileName: filename,
+      contentType: mimetype,
+      buffer: null,
     }
-    console.log('File [' + fieldname + ']: filename: ' + filename + ', encoding: ' + encoding + ', mimetype: ' + mimetype);
     file.on('data', function(data) {
-      console.log('File [' + fieldname + '] got ' + data.length + ' bytes');
-      console.log(data);
+      if(!attachment.buffer) {
+        attachment.buffer = data;
+      } else {
+        attachment.buffer = Buffer.concat(attachment.buffer, data);
+      }
     });
-    file.on('end', _.noop);
+    file.on('end', function(){
+      post.attachments.push(attachment);
+    });
   });
   busboy.on('finish', function() {
     res.writeHead(200, {Connection: 'close'});
@@ -50,7 +58,7 @@ PostServer.prototype.listen = function(handler){
   var port = this.port;
   var server = http.createServer(function(req, res) {
     if (req.method === 'POST') {
-      handlePost(req, res, hander);
+      handlePost(req, res, handler);
     }
   });
 

@@ -14,7 +14,8 @@
     "edit-google-spreadsheet": "^0.2.21",
     "lodash": "^4.12.0",
     "mailgun-js": "^0.7.11",
-    "moment": "^2.13.0"
+    "moment": "^2.13.0",
+    "s3": "^4.4.0"
   },
   "repository": {
     "type": "git",

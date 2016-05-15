@@ -7,3 +7,5 @@ node_modules
 # Heroku local configuration
 .env
 gdrive.pem
+
+scratch.js
