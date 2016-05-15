@@ -125,9 +125,10 @@ function appendMessageToSpreadsheet(message){
     message.amount,
     message.description
   ];
-  //the first attachment is the body
-  _.each(message.attachments, function(attachment){
-    row.push(attachment);
+
+  _.each(message.attachments, function(attachmentLink, index){
+    var cell = ['=HYPERLINK("', attachmentLink, '", "', index, '")'].join('');
+    row.push(cell);
   });
     var errorHook = _.curry(logError)(message.sender);
   spreadsheet.append(row, errorHook);
