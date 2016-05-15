@@ -39,7 +39,7 @@ SpreadsheetClass.prototype.append = function(row, callback){
     spreadsheet.send(withErr('send', _.noop));
   }
   editSpreadsheet.load({
-    debug:true,
+    debug:false,
     spreadsheetId: this.options.fileId,
     worksheetName: 'Sheet1',
     oauth:{
