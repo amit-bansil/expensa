@@ -33,16 +33,14 @@ function handlePost(req, res, handler){
     var attachment = {
       fileName: filename,
       contentType: mimetype,
-      buffer: null,
+      buffers: [],
     }
     file.on('data', function(data) {
-      if(!attachment.buffer) {
-        attachment.buffer = data;
-      } else {
-        attachment.buffer = Buffer.concat(attachment.buffer, data);
-      }
+      attachment.buffers.push(data);
     });
     file.on('end', function(){
+      attachment.buffer = Buffer.concat(attachment.buffers);
+      delete attachment.buffers;
       post.attachments.push(attachment);
     });
   });
