@@ -63,14 +63,13 @@ heroku config:set GRDIVE_KEY="`cat </path/to/key/file.pem>`"
 heroku config:set GDRIVE_FILEID=<spreadsheet file id>
 ```
 
-1. Create an Amazon S3 bucket and a user with full access to that bucket.
-Store the following keys that you got while setting up api access in Heroku's
-environment as follows:
+1. Create an Amazon S3 bucket in the US Standard region and a user with full
+access to that bucket. Store the following keys that you got while setting up
+api access in Heroku's environment as follows:
 ```
 heroku config:set S3_ACCESS_KEY=<aws iam user access key>
 heroku config:set S3_SECRET_KEY=<aws iam user secret api key>
 heroku config:set S3_BUCKET=<bucket.name>
-heroku config:set S3_REGION=<s3-region>
 ```
 You can find the s3 region in this table:
 

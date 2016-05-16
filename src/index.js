@@ -35,7 +35,6 @@ var s3 = new S3Class({
   accessKeyId:     env.S3_ACCESS_KEY,
   secretAccessKey: env.S3_SECRET_KEY,
   bucket:          env.S3_BUCKET,
-  region:          env.S3_REGION,
 });
 
 //------------------------------------------------------------------------------

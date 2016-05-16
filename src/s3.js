@@ -1,52 +1,48 @@
 /**
- * upload a buffer to s3 and return a publicly accessible url
- * TODO spec this out
+ * upload a buffer to s3 and return a publicly accessible url. Usage:
+ * var S3Class = require('./s3');
+ * var s3 = new S3Class({
+ *   accessKeyId:     <iamAccessKey>,
+ *   secretAccessKey: <iamSecretKey>,
+ *   bucket:          <some.bucket>,
+ * });
+ * var link = s3.upload('fileName.txt', 'text/plain', buffer, function(url){
+ *   console.log(url);
+ * })
+ *
+ * Note that this code expects the bucket to be in the us standard region.
  */
 
-var s3 = require('s3');
-var fs = require('fs');
+var AWS = require('aws-sdk');
 
 function S3Class(options){
-  this.client = s3.createClient({
-    s3Options: options
-  });
-  this.bucket = options.bucket;
+  this.options = options;
 }
 
 S3Class.prototype.upload = function(filename, contentType, buffer, callback){
-  var bucket = this.bucket;
+  var bucket = this.options.bucket;
 
-  var tempFile = '/tmp/' + new Date().getTime();
-
-  fs.writeFileSync(tempFile, buffer);
+  //thanks to some genius at amazon the access keys are global variables
+  //so we need to clobber them which might break other clients with different ids
+  AWS.config.update({
+    accessKeyId: this.options.accessKeyId,
+    secretAccessKey: this.options.secretAccessKey,
+  });
+  var s3 = new AWS.S3();
 
   function done(error){
-    //for unknown reasons sometimes we get an error where fs.unlinkSync fails
-    //this gaurd seems to prevent it.
-    //Although this will eventually fill the disk, heroku's daily restarts
-    //will take care of that.
-    if(!error){
-      fs.unlinkSync(tempFile);
-    }
     var uploadUrl = 'http://' + bucket + '.s3.amazonaws.com/' + filename;
     callback(error, uploadUrl);
   }
 
-  var uploader = this.client.uploadFile({
-    localFile: tempFile,
-    s3Params: {
-      Bucket:      bucket,
-      Key:         filename,
-      ACL:         'public-read',
-      ContentType: contentType,
-    }
-  });
-  uploader.on('error', function(err) {
-    done(err);
-  });
-  uploader.on('end', function() {
-    done();
-  });
+  var s3 = new AWS.S3({apiVersion: '2006-03-01'});
+  s3.putObject({
+    Bucket:      bucket,
+    Key:         filename,
+    Body:        buffer,
+    ACL:         'public-read',
+    ContentType: contentType,
+  }, done);
 }
 
 module.exports = S3Class;
