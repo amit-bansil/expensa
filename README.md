@@ -23,56 +23,51 @@ a bit involved. Here's what you need to do.
 1. Fork the project and check it out on your own machine.
 
 2. Get Heroku setup on your computer as per the first two steps of:
-
    https://devcenter.heroku.com/articles/getting-started-with-nodejs#introduction
 
 3. Create a Heroku app by running the following command in the project dir:
-
-```
-> heroku apps:create <your.app.name>
-```
+   ```
+   > heroku apps:create <your.app.name>
+   ```
 
 4. Set the endpoint secret:
-
-```
-> heroku config:set ENDPOINT_SECRET=<long random string of lowercase letters>
-```
+   ```
+   > heroku config:set ENDPOINT_SECRET=<long random string of lowercase letters>
+   ```
 
 5. Open a Mailgun account and configure a domain. Don't forget to add DNS records
 for receiving mail.
 
 6. Create a `catch_all()` route that forwards messages to your app:
-`http://<your.app.name>.heroku.com/<ENDPOINT_SECRET>`
+   `http://<your.app.name>.heroku.com/<ENDPOINT_SECRET>`
 
 7. Give Heroku access to Mailgun by setting the following keys:
-
-```
-heroku config:set MAILGUN_DOMAIN=<money.your.domain>
-heroku config:set MAILGUN_API_LEY=<YourMailgunAPIKey>
-```
+   ```
+   heroku config:set MAILGUN_DOMAIN=<money.your.domain>
+   heroku config:set MAILGUN_API_LEY=<YourMailgunAPIKey>
+   ```
 
 8. Setup google drive api access as per the link below:
+   https://www.npmjs.com/package/google-spreadsheet-append
 
-https://www.npmjs.com/package/google-spreadsheet-append
-
-Store the following keys that you got while setting up api access in Heroku's
-environment as follows:
-```
-heroku config:set GDRIVE_EMAIL=<service account email>
-heroku config:set GRDIVE_KEY="`cat </path/to/key/file.pem>`"
-heroku config:set GDRIVE_FILEID=<spreadsheet file id>
-```
+   Store the following keys that you got while setting up api access in Heroku's
+   environment as follows:
+   ```
+   heroku config:set GDRIVE_EMAIL=<service account email>
+   heroku config:set GRDIVE_KEY="`cat </path/to/key/file.pem>`"
+   heroku config:set GDRIVE_FILEID=<spreadsheet file id>
+   ```
 
 9. Create an Amazon S3 bucket in the US Standard region and a user with full
 access to that bucket. Store the following keys that you got while setting up
 api access in Heroku's environment as follows:
-```
-heroku config:set S3_ACCESS_KEY=<aws iam user access key>
-heroku config:set S3_SECRET_KEY=<aws iam user secret api key>
-heroku config:set S3_BUCKET=<bucket.name>
-```
-You can find the s3 region in this table:
+   ```
+   heroku config:set S3_ACCESS_KEY=<aws iam user access key>
+   heroku config:set S3_SECRET_KEY=<aws iam user secret api key>
+   heroku config:set S3_BUCKET=<bucket.name>
+   ```
+   You can find the s3 region in this table:
 
-http://docs.aws.amazon.com/general/latest/gr/rande.html
+   http://docs.aws.amazon.com/general/latest/gr/rande.html
 
-Use us-east-1 for US Standard.
+   Use us-east-1 for US Standard.
