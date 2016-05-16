@@ -12,7 +12,12 @@ var Busboy = require('busboy');
  * });
  *
  * endpointPath is the path the post request was made to.
- * post is an object with TODO spec this out.
+ * post is an object containing the fields of the post request by the key they
+ * were stored with. post also contains a special `attachments` key that is
+ * an array of files attached to the post. Each element of the aray is an object
+ * containging the fields `fileName`, `contentType`, `buffer`. Note that
+ * the full attachments are thus uploaded entirely to RAM. As such this code
+ * is not very memory efficient.
  */
 
 function PostServer(port){
