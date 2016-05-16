@@ -45,7 +45,7 @@ for receiving mail.
 7. Give Heroku access to Mailgun by setting the following keys:
    ```
    heroku config:set MAILGUN_DOMAIN=<money.your.domain>
-   heroku config:set MAILGUN_API_LEY=<YourMailgunAPIKey>
+   heroku config:set MAILGUN_API_KEY=<YourMailgunAPIKey>
    ```
 
 8. Setup google drive api access as per the link below:
