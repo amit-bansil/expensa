@@ -10,9 +10,9 @@ to. The subject line of your emails should be of the form `<amount>: <descriptio
 for receipts and just `<description>` for tax documents that don't have an amount.
 
 The bot will append rows of the form:
-
+```
 <date>, <sender email>, <category>, (<amount>), <description>, (<link to body>), (link to first attachement...)
-
+```
 to a google spreadsheet.
 
 # Setup
