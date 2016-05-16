@@ -67,8 +67,3 @@ api access in Heroku's environment as follows:
    heroku config:set S3_SECRET_KEY=<aws iam user secret api key>
    heroku config:set S3_BUCKET=<bucket.name>
    ```
-   You can find the s3 region in this table:
-
-   http://docs.aws.amazon.com/general/latest/gr/rande.html
-
-   Use us-east-1 for US Standard.
