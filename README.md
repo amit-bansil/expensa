@@ -8,6 +8,7 @@ Once you set this up you'll have a collection of email addresses of the form
 `<category>@<your.domain>` that you can send receipts and tax documents
 to. The subject line of your emails should be of the form `<amount>: <description>`
 for receipts and just `<description>` for tax documents that don't have an amount.
+`<category>` can be any arbitrary name that is recognized as an email.
 
 The bot will append rows of the form:
 ```
