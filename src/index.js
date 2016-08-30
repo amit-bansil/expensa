@@ -56,15 +56,8 @@ function _messagePosted(url, message){
     confirmReceipt(uploadedMessage);
   });
 }
-function messagePosted(url, message){
-  try{
-    _messagePosted.apply(null, arguments);
-  }catch(error){
-    logError(message.sender, error);
-  }
-}
 
-postServer.listen(messagePosted);
+postServer.listen(logErrorsOver(messagePosted));
 
 //------------------------------------------------------------------------------
 function parseMessage(message){
@@ -186,4 +179,16 @@ function logError(to, error){
       + '(' + moment().format() + ')',
     text:    error + '',
   });
+}
+
+// Return a function that calls 'decorateMe' with the same arguments catching any
+// exceptions and piping them to 'logError'
+function logErrorsOver(decorateMe){
+  return function(){
+    try{
+      _messagePosted.apply(null, arguments);
+    }catch(error){
+      logError(message.sender, error);
+    }
+  }
 }
