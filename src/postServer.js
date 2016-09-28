@@ -7,7 +7,7 @@ var Busboy = require('busboy');
  *
  * var PostServerClass = require('./postServer');
  * var postServer = new PostServerClass(port);
- * postServer.listen(function(endopintPath, post){
+ * postServer.listen(function(endpointPath, post){
  *   ...
  * });
  *
